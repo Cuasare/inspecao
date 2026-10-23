@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="br.ufmt.app" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Inspeção</name>
+    <description>
+        Aplicativo simples cuja função é tirar fotos e catalogar patologias em pontes e realizar o envio das informações
+        para um backend, caso não tenha conexão com a internet aguardar até ter para realizar o envio.
+    </description>
+    <author email="dev@cordova.apache.org" href="https://cordova.apache.org">
+        Apache Cordova Team
+    </author>
+    <content src="index.html" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+</widget>
