@@ -1,52 +1,67 @@
-/**
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
-*/
-
-// Wait for the deviceready event before using any of Cordova's device APIs.
-// See https://cordova.apache.org/docs/en/latest/cordova/events/events.html#deviceready
 document.addEventListener('deviceready', onDeviceReady, false);
 
 function onDeviceReady() {
-    // Cordova is now initialized. Have fun!
     botaoCamera();
+    getPhotoUri();
 }
 
 function botaoCamera(){
     const btt_foto = document.getElementById("tirarFoto");
-    btt_foto.addEventListener("click", tirarFoto)
+    btt_foto.addEventListener("click", tirarFoto);
 }
 
 function tirarFoto() {
-    navigator.camera.getPicture(onSucess, onFail, {
-        quality: 50,
+    navigator.camera.getPicture(onSuccess, onFail, {
+        quality: 100,
         destinationType: Camera.DestinationType.FILE_URI,
         sourceType: Camera.PictureSourceType.CAMERA,
-        encodingType: Camera.EncodingType.JPEG,
-        correctOrientation: true
-    })
+        correctOrientation: true,
+    });
 }
 
-function onSucess(imageUri) {
-    console.log(imageUri)
-    var imagem = document.getElementById('minhaFoto');
-    imagem.src = imageUri;
+function onSuccess(imageUri) {
+    var imagem = document.getElementById("minhaFoto");
+
+    window.resolveLocalFileSystemURL(imageUri, function (fileEntryOrigin) {
+        window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function (diretorioDestino) {
+
+            const novo_nome = "foto_" + new Date().getTime() + ".jpg";
+
+            fileEntryOrigin.moveTo(diretorioDestino, novo_nome, function (novoFileEntry) {
+
+                imagem.src = novoFileEntry.toURL();
+
+                console.log("Foto salva permanentemente em: " + novoFileEntry.toURL());
+                localStorage.setItem("ultima_foto_nome", novo_nome);
+
+            }, errorFileSystem);
+        }, errorFileSystem);
+    }, errorFileSystem);
 }
 
 function onFail(message) {
-    alert('Falha ao retirar a foto' + message);
+    alert('Falha ao retirar a foto: ' + message);
+}
+
+function getPhotoUri() {
+    var imagem = document.getElementById("minhaFoto");
+    const imagemDiv = document.getElementById("imageFallback");
+    const nomeArquivo = localStorage.getItem("ultima_foto_nome");
+
+    if (nomeArquivo == null){
+        if (imagemDiv) imagemDiv.textContent = "Foto não encontrada!";
+        return;
+    }
+
+    window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function (diretorio) {
+        diretorio.getFile(nomeArquivo, { create: false }, function (fileEntry) {
+
+            imagem.src = fileEntry.toURL();
+
+        }, errorFileSystem);
+    }, errorFileSystem);
+}
+
+function errorFileSystem(error) {
+    console.error("Erro no File System: Código " + error.code);
 }
