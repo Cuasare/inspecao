@@ -1,24 +1,30 @@
-/**
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
+:root {
+    --cor-fundo: #F2F4F7;
+    --cor-superficie: #FFFFFF;
+    --cor-texto: #1B2430;
+    --cor-texto-suave: #5B6675;
+    --cor-borda: #DDE2E9;
+    --cor-primaria: #1F3A5F;
+    --cor-destaque: #FFB300;
+    --cor-online: #4CAF50;
+    --cor-offline: #E53935;
+    --cor-acao: #1F3A5F;
+}
 
-        http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
-*/
+@media (prefers-color-scheme: dark) {
+    :root {
+        --cor-fundo: #11161D;
+        --cor-superficie: #1C242E;
+        --cor-texto: #E8ECF1;
+        --cor-texto-suave: #9AA6B5;
+        --cor-borda: #2C3744;
+        --cor-primaria: #16283F;
+        --cor-acao: #4C8DF6;
+    }
+}
 
 * {
-    -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     box-sizing: border-box;
 }
 
@@ -27,116 +33,41 @@ html {
 }
 
 body {
-    -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
-    -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
-    -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
-    background-color:#E4E4E4;
-    background-image:linear-gradient(to bottom, #A7A7A7 0%, #E4E4E4 51%);
-    font-family: system-ui, -apple-system, -apple-system-font, 'Segoe UI', 'Roboto', sans-serif;
-    font-size:12px;
-    height:100vh;
-    margin:0px;
-    padding:0px;
-    /* Padding to avoid the "unsafe" areas behind notches in the screen */
+    -webkit-touch-callout: none;
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+    font-family: system-ui, -apple-system, 'Segoe UI', 'Roboto', sans-serif;
+    font-size: 16px;
+    margin: 0;
+    min-height: 100vh;
     padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
-    text-size-adjust: none;
-    text-transform:uppercase;
     user-select: none;
-    width:100%;
 }
 
-/* Portrait layout (default) */
-.app {
-    background:url(../img/logo.png) no-repeat center top; /* 170px x 200px */
-    position:absolute;             /* position in the center of the screen */
-    left:50%;
-    top:50%;
-    height:50px;                   /* text area height */
-    width:225px;                   /* text area width */
-    text-align:center;
-    padding:180px 0px 0px 0px;     /* image height is 200px (bottom 20px are overlapped with text) */
-    margin:-115px 0px 0px -112px;  /* offset vertical: half of image height and text area height */
-                                   /* offset horizontal: half of text area width */
+h1,
+h2,
+p,
+ul {
+    margin: 0;
+    padding: 0;
 }
 
-/* Landscape layout (with min-width) */
-@media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
-    .app {
-        background-position:left center;
-        padding:75px 0px 75px 170px;  /* padding-top + padding-bottom + text area = image height */
-        margin:-90px 0px 0px -198px;  /* offset vertical: half of image height */
-                                      /* offset horizontal: half of image width and text area width */
-    }
-}
-
-h1 {
-    font-size:24px;
-    font-weight:normal;
-    margin:0px;
-    overflow:visible;
-    padding:0px;
-    text-align:center;
-}
-
-.event {
-    border-radius:4px;
-    color:#FFFFFF;
-    font-size:12px;
-    margin:0px 30px;
-    padding:2px 0px;
-}
-
-.event.listening {
-    background-color:#333333;
-    display:block;
-}
-
-.event.received {
-    background-color:#4B946A;
-    display:none;
-}
-
-#deviceready.ready .event.listening { display: none; }
-#deviceready.ready .event.received { display: block; }
-
-@keyframes fade {
-    from { opacity: 1.0; }
-    50% { opacity: 0.4; }
-    to { opacity: 1.0; }
-}
-
-.blink {
-    -webkit-animation:fade 3000ms infinite;
-    animation:fade 3000ms infinite;
-}
-
-
-@media screen and (prefers-color-scheme: dark) {
-    body {
-        background-image:linear-gradient(to bottom, #585858 0%, #1B1B1B 51%);
-    }
-}
-
-
-#minhaFoto {
-    max-width: 100%;
-    height: auto;
-}
 /* Barra superior */
 .topbar {
     align-items: center;
-    background-color: #1F3A5F;
+    background-color: var(--cor-primaria);
     color: #FFFFFF;
     display: flex;
     justify-content: space-between;
     padding: 12px 16px;
-    text-transform: none;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .topbar-titulo {
     font-size: 20px;
     font-weight: 600;
-    text-align: left;
 }
 
 .topbar-acoes {
@@ -159,29 +90,234 @@ h1 {
 }
 
 .status.online::before {
-    background-color: #4CAF50;
+    background-color: var(--cor-online);
 }
 
 .status.offline::before {
-    background-color: #E53935;
+    background-color: var(--cor-offline);
 }
 
 #btn-sincronizar {
     background-color: #FFFFFF;
     border: none;
-    border-radius: 4px;
-    color: #1F3A5F;
+    border-radius: 6px;
+    color: var(--cor-primaria);
     font-size: 14px;
+    font-weight: 600;
+    min-height: 36px;
     padding: 6px 12px;
 }
 
+#btn-sincronizar:active {
+    opacity: 0.8;
+}
+
 .fila {
-    background-color: #FFB300;
-    border-radius: 10px;
+    background-color: var(--cor-destaque);
+    border-radius: 12px;
     color: #000000;
     font-size: 14px;
     font-weight: 600;
-    min-width: 24px;
-    padding: 2px 8px;
+    min-width: 26px;
+    padding: 3px 8px;
     text-align: center;
+}
+
+/* Conteúdo */
+.conteudo {
+    padding: 16px;
+}
+
+.secao-titulo {
+    color: var(--cor-texto-suave);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+
+.lista {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    list-style: none;
+}
+
+.item-projeto {
+    align-items: center;
+    background-color: var(--cor-superficie);
+    border: 1px solid var(--cor-borda);
+    border-radius: 10px;
+    color: inherit;
+    display: flex;
+    font: inherit;
+    justify-content: space-between;
+    min-height: 56px;
+    padding: 10px 14px;
+    text-align: left;
+    width: 100%;
+}
+
+.item-projeto:active {
+    background-color: var(--cor-borda);
+}
+
+.item-projeto-texto {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.item-projeto-nome {
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.item-projeto-seta {
+    color: var(--cor-texto-suave);
+    font-size: 24px;
+    line-height: 1;
+    margin-left: 12px;
+}
+
+/* Estado vazio: o atributo hidden esconde a mensagem quando há itens */
+.vazio {
+    color: var(--cor-texto-suave);
+    padding: 32px 0;
+    text-align: center;
+}
+
+.vazio[hidden] {
+    display: none;
+}
+
+/* Cabeçalho da seção com botão de adicionar */
+.secao-cabecalho {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.secao-cabecalho .secao-titulo {
+    margin-bottom: 0;
+}
+
+.btn-adicionar {
+    align-items: center;
+    background-color: var(--cor-acao);
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    color: #FFFFFF;
+    display: flex;
+    font-size: 28px;
+    font-weight: 300;
+    height: 44px;
+    justify-content: center;
+    line-height: 1;
+    padding: 0 0 3px;
+    width: 44px;
+}
+
+.btn-adicionar:active {
+    opacity: 0.85;
+    transform: scale(0.96);
+}
+
+/* Modal (elemento <dialog> nativo) */
+.modal {
+    background-color: var(--cor-superficie);
+    border: 1px solid var(--cor-borda);
+    border-radius: 14px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    color: var(--cor-texto);
+    max-width: 420px;
+    padding: 20px;
+    width: calc(100% - 32px);
+}
+
+/* Sem isso, rolar sobre o fundo ou dentro do modal rola a página atrás */
+dialog:modal {
+    overscroll-behavior: contain;
+}
+
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.55);
+    overflow: hidden;
+    overscroll-behavior: contain;
+}
+
+.modal-titulo {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.campo-rotulo {
+    color: var(--cor-texto-suave);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.campo input {
+    -webkit-user-select: text;
+    background-color: var(--cor-fundo);
+    border: 1px solid var(--cor-borda);
+    border-radius: 8px;
+    color: var(--cor-texto);
+    font: inherit;
+    min-height: 44px;
+    padding: 8px 12px;
+    user-select: text;
+    width: 100%;
+}
+
+.campo input:focus {
+    border-color: var(--cor-acao);
+    outline: 2px solid var(--cor-acao);
+    outline-offset: 0;
+}
+
+.modal-acoes {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.btn-primario,
+.btn-secundario {
+    border-radius: 8px;
+    font: inherit;
+    font-weight: 600;
+    min-height: 44px;
+    padding: 8px 18px;
+}
+
+.btn-primario {
+    background-color: var(--cor-acao);
+    border: 1px solid var(--cor-acao);
+    color: #FFFFFF;
+}
+
+.btn-secundario {
+    background-color: transparent;
+    border: 1px solid var(--cor-borda);
+    color: var(--cor-texto);
+}
+
+.btn-primario:active,
+.btn-secundario:active {
+    opacity: 0.8;
 }

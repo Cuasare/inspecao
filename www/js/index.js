@@ -1,24 +1,23 @@
 var db = null;
+var listaProjetos = document.getElementById("lista-projetos-vazia")
 
 document.addEventListener('deviceready', onDeviceReady, false);
 
 function onDeviceReady() {
-    botaoCamera();
-    getPhotoUri();
-
     db = window.sqlitePlugin.openDatabase({
         name: 'inspecoes.db',
-        localtion: 'default',
+        location: 'default',
     })
 
-    iniciarTabelas();
-
+    criarTabelas();
+    buscarPontes();
+    pegaNomePonte();
 }
 
 const SCHEMA = [
     `CREATE TABLE IF NOT EXISTS pontes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome TEXT NOT NULL,
+        nome TEXT NOT NULL
     )`,
 
     `CREATE TABLE IF NOT EXISTS patologias (
@@ -43,10 +42,6 @@ const SCHEMA = [
     )`,
 ];
 
-function iniciarTabelas() {
-    db.executeSql('PRAGMA foreign_keys = ON;', [], criarTabelas, errorBanco);
-}
-
 function criarTabelas() {
     db.transaction(function (tx) {
         SCHEMA.forEach(function (sql) {
@@ -54,13 +49,61 @@ function criarTabelas() {
         });
     }, errorBanco, function () {
         console.log("Tabelas prontas");
+        buscarPontes();
     });
 }
+
 
 function errorBanco(error) {
     console.error("Erro no banco: " + error.message);
 }
 
+function pegaNomePonte(){
+    const dialog = document.getElementById("dialog-novo-projeto");
+    const form = document.getElementById("form-novo-projeto");
+    const input = document.getElementById("input-nome-projeto");
 
+    dialog.addEventListener("close", function (){
+        const nome = input.value.trim();
+
+        if (dialog.returnValue === "salvar" && nome){
+            salvarNomePonte(nome)
+        }
+
+        dialog.returnValue = "";
+        form.reset();
+    })
+}
+
+function salvarNomePonte(nome) {
+    db.transaction(function (tx){
+        tx.executeSql('INSERT INTO pontes (nome) VALUES (?)', [nome])
+    }, errorBanco, buscarPontes)
+}
+
+function buscarPontes() {
+    db.transaction(function (tx) {
+        var query = 'SELECT * FROM pontes';
+
+        tx.executeSql(query, [], function (tx, resultSet){
+            const tamanho = resultSet.rows.length;
+
+            const template = document.getElementById("tpl-item-projeto")
+            const container = document.getElementById("lista-projetos")
+            container.innerHTML = '';
+
+            for (let i = 0; i < tamanho; i++){
+                const row = resultSet.rows.item(i)
+                const clone = template.content.cloneNode(true)
+                clone.querySelector(".item-projeto-nome").textContent = row.nome;
+                container.appendChild(clone);
+            }
+
+            listaProjetos.hidden = tamanho > 0;
+        })
+    }, errorBanco, function () {
+        console.log("Erro na transação do banco");
+    })
+}
 
 

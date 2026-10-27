@@ -20,14 +20,6 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <!--
-        Customize this policy to fit your own app's needs. For more guidance, please refer to the docs:
-            https://cordova.apache.org/docs/en/latest/
-        Some notes:
-            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
-            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-                * Enable inline JS: add 'unsafe-inline' to default-src
-        -->
         <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
@@ -45,9 +37,46 @@
                 <span id="fila-pendentes" class="fila" title="Patologias na fila de envio">0</span>
             </div>
         </header>
+
+        <main class="conteudo">
+            <div class="secao-cabecalho">
+                <h2 class="secao-titulo">Projetos</h2>
+                <button id="btn-novo-projeto" class="btn-adicionar" type="button" aria-label="Adicionar projeto" command="show-modal" commandfor="dialog-novo-projeto">+</button>
+            </div>
+
+            <ul id="lista-projetos" class="lista"></ul>
+
+            <p id="lista-projetos-vazia" class="vazio">Nenhum projeto cadastrado.</p>
+        </main>
+
+        <dialog id="dialog-novo-projeto" class="modal" aria-labelledby="dialog-novo-projeto-titulo">
+            <form id="form-novo-projeto" method="dialog">
+                <h2 id="dialog-novo-projeto-titulo" class="modal-titulo">Novo projeto</h2>
+
+                <label class="campo">
+                    <span class="campo-rotulo">Nome do projeto</span>
+                    <input id="input-nome-projeto" name="nome" type="text" required maxlength="80" autocomplete="off" autofocus>
+                </label>
+
+                <div class="modal-acoes">
+                    <button type="submit" value="cancelar" class="btn-secundario" formnovalidate>Cancelar</button>
+                    <button id="btn-salvar-ponte" type="submit" value="salvar" class="btn-primario">Salvar</button>
+                </div>
+            </form>
+        </dialog>
+
+        <template id="tpl-item-projeto">
+            <li>
+                <button type="button" class="item-projeto">
+                    <span class="item-projeto-texto">
+                        <span class="item-projeto-nome" id="item-projeto-nome"></span>
+                    </span>
+                    <span class="item-projeto-seta" aria-hidden="true">&rsaquo;</span>
+                </button>
+            </li>
+        </template>
+
         <script src="cordova.js"></script>
         <script src="js/index.js"></script>
-
-
     </body>
 </html>
