@@ -37,11 +37,14 @@
         <title>Inspeção OAEs</title>
     </head>
     <body>
-        <div class="app">
-            <button id="tirarFoto">Tirar foto com camera interna</button>
-            <div id="imageFallback"></div>
-            <img id="minhaFoto">
-        </div>
+        <header class="topbar">
+            <h1 class="topbar-titulo">Inspeção</h1>
+            <div class="topbar-acoes">
+                <span id="status-conexao" class="status online">Online</span>
+                <button id="btn-sincronizar" type="button">Sincronizar</button>
+                <span id="fila-pendentes" class="fila" title="Patologias na fila de envio">0</span>
+            </div>
+        </header>
         <script src="cordova.js"></script>
         <script src="js/index.js"></script>
 
