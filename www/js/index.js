@@ -9,9 +9,8 @@ function onDeviceReady() {
         location: 'default',
     })
 
-    criarTabelas();
-    buscarPontes();
-    pegaNomePonte();
+    iniciarTabelas();
+    registrarOuvintes();
 }
 
 const SCHEMA = [
@@ -42,6 +41,10 @@ const SCHEMA = [
     )`,
 ];
 
+function iniciarTabelas() {
+    db.executeSql('PRAGMA foreign_keys = ON;', [], criarTabelas, errorBanco);
+}
+
 function criarTabelas() {
     db.transaction(function (tx) {
         SCHEMA.forEach(function (sql) {
@@ -58,7 +61,26 @@ function errorBanco(error) {
     console.error("Erro no banco: " + error.message);
 }
 
-function pegaNomePonte(){
+document.addEventListener("online", online, false)
+
+function online() {
+    var estadoInternet = navigator.connection.type;
+    if (estadoInternet !== Connection.NONE){
+        const status = document.getElementById("status-conexao");
+        status.classList.replace("offline", "online");
+        status.textContent = 'Online';
+    }
+}
+
+document.addEventListener("offline", offline, false);
+
+function offline() {
+    const status = document.getElementById("status-conexao");
+    status.classList.replace("online", "offline");
+    status.textContent = 'Offline';
+}
+
+function registrarOuvintes() {
     const dialog = document.getElementById("dialog-novo-projeto");
     const form = document.getElementById("form-novo-projeto");
     const input = document.getElementById("input-nome-projeto");
@@ -100,10 +122,7 @@ function buscarPontes() {
             }
 
             listaProjetos.hidden = tamanho > 0;
-        })
-    }, errorBanco, function () {
-        console.log("Erro na transação do banco");
-    })
+        }, errorBanco);
+    }, errorBanco);
 }
-
 
