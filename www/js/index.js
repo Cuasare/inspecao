@@ -69,6 +69,9 @@ function online() {
         const status = document.getElementById("status-conexao");
         status.classList.replace("offline", "online");
         status.textContent = 'Online';
+        const sincronizarButton = document.getElementById("btn-sincronizar")
+        sincronizarButton.disabled = false;
+
     }
 }
 
@@ -78,6 +81,8 @@ function offline() {
     const status = document.getElementById("status-conexao");
     status.classList.replace("online", "offline");
     status.textContent = 'Offline';
+    const sincronizarButton = document.getElementById("btn-sincronizar")
+    sincronizarButton.disabled = true;
 }
 
 function registrarOuvintes() {
